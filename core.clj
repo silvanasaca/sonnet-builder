@@ -1,35 +1,28 @@
 ;; gorilla-repl.fileformat = 1
 
-;; @@
+;; A sonnet builder
 (ns sonnet-builder.core
   (:gen-class)
   )
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
-;; <=
 
-;; @@
+
+;; Counts the syllables in a string so far
 (defn syllable-counter
+  ;;Takes a map of words
   [word-map]
+  ;;The map contains each word's syllables. They are all added together.
   (reduce + (map :syllables word-map))
   )
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/syllable-counter</span>","value":"#'sonnet-builder.core/syllable-counter"}
-;; <=
 
-;; @@
+;;An example of how it works
 (syllable-counter
   [{:word "trees" :syllables 1}
    {:word "grow" :syllables 1}
    {:word "slowly" :syllables 2}])
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-long'>4</span>","value":"4"}
-;; <=
 
-;; @@
+;; returns 4
+
+;; A hard-coded dictionary of iambic first phrases
 (def first-phrase [{:word "The" :syllables 1}
                    {:word "Remember my" :syllables 4}
                    {:word "A" :syllables 1}
@@ -43,12 +36,7 @@
                    {:word "From" :syllables 1}
                    
                    ])
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/first-phrase</span>","value":"#'sonnet-builder.core/first-phrase"}
-;; <=
-
-;; @@
+;;A hard coded dictionary of stressed words.
 (def stressed-start-noun [
                            ;;NOUNS 
 
@@ -401,12 +389,9 @@
 
 
                           ])
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/stressed-start-noun</span>","value":"#'sonnet-builder.core/stressed-start-noun"}
-;; <=
 
-;; @@
+
+;;A hardcoded dictionary of unstressed words
 (def unstressed-start-noun [{:word "and" :syllables 1 :type "conj"}
                             {:word "to" :syllables 1 :type "conj"}
                             
@@ -529,20 +514,8 @@
                             ])
 
 
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/unstressed-start-noun</span>","value":"#'sonnet-builder.core/unstressed-start-noun"}
-;; <=
-
-;; @@
-(:type (last unstressed-start-noun))
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-string'>&quot;adj&quot;</span>","value":"\"adj\""}
-;; <=
-
-;; @@
-;filters the next word through type and syllables
+;;Filters the words so that adjectives must be followed by nouns, nouns followed by adjectives, conjunctions followed by nouns
+;; and verbs followed by conjunctions. Otherwise, use verbs. The words must also fit into the threshold
 (defn filter-words
   [word-map threshold prev-word-type]
   (filter #(<= (:syllables %) threshold) word-map)
@@ -553,17 +526,9 @@
     (= prev-word-type "verb") (filter #(= (:type %) "conj") word-map)
     :else (filter #(= (:type %) "verb") word-map)))
   
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/filter-words</span>","value":"#'sonnet-builder.core/filter-words"}
-;; <=
 
-;; @@
 (filter-words unstressed-start-noun 1 "verb")
-;; @@
-;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:word</span>","value":":word"},{"type":"html","content":"<span class='clj-string'>&quot;and&quot;</span>","value":"\"and\""}],"value":"[:word \"and\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:syllables</span>","value":":syllables"},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"}],"value":"[:syllables 1]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:type</span>","value":":type"},{"type":"html","content":"<span class='clj-string'>&quot;conj&quot;</span>","value":"\"conj\""}],"value":"[:type \"conj\"]"}],"value":"{:word \"and\", :syllables 1, :type \"conj\"}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:word</span>","value":":word"},{"type":"html","content":"<span class='clj-string'>&quot;to&quot;</span>","value":"\"to\""}],"value":"[:word \"to\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:syllables</span>","value":":syllables"},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"}],"value":"[:syllables 1]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:type</span>","value":":type"},{"type":"html","content":"<span class='clj-string'>&quot;conj&quot;</span>","value":"\"conj\""}],"value":"[:type \"conj\"]"}],"value":"{:word \"to\", :syllables 1, :type \"conj\"}"}],"value":"({:word \"and\", :syllables 1, :type \"conj\"} {:word \"to\", :syllables 1, :type \"conj\"})"}
-;; <=
+;;returns a noun>10
 
 ;; @@
 ; Adds a word to the verse
@@ -579,16 +544,10 @@
     ))
 
 
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/add-word</span>","value":"#'sonnet-builder.core/add-word"}
-;; <=
 
-;; @@
 ; Writes a line in iambic pentameter. It prints when ten syllables are reached. Otherwise, words are added recursively. 
 (defn verse-builder
   []
-  
 (loop [verse [(rand-nth first-phrase)]]
   (if (= (syllable-counter verse) 10)
     (apply str (interleave (map :word verse)
@@ -597,40 +556,17 @@
          
     (recur (add-word verse (- 10 (syllable-counter verse)) (:type (last verse))) 
           ))))
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/verse-builder</span>","value":"#'sonnet-builder.core/verse-builder"}
-;; <=
 
-;; @@
 (verse-builder)
-;; @@
 
-;; @@
-;Writes a sonnet using the verse builder.
+
 (defn sonnet-writer
   []
   
   (doseq [verse (repeatedly 14 verse-builder)]
     (println verse)
     ))
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;sonnet-builder.core/sonnet-writer</span>","value":"#'sonnet-builder.core/sonnet-writer"}
-;; <=
 
-;; @@
 
-;; @@
-
-;; @@
-(type (sonnet-writer))
-;; @@
-
-;; @@
-
-;; @@
-
-;; @@
 
 ;; @@
