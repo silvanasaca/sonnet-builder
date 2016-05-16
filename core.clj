@@ -568,5 +568,18 @@
     ))
 
 
-
+;; As pregnant crafty chimney hard ballet 
+;;Because asbestos beflowering smells 
+;;To humming light unkempt ballet cigar 
+;;Because buffoon eclipse mysterious gold 
+;;A triggers drab dismay delightful sage 
+;;To shallow pace serene champagne constraint 
+;;As path befallen blooming calm brigade 
+;;To decade leopards death conspicuous 
+;;Amidst the river glassware higher cold 
+;;As kneading finger clean and wasted quaint 
+;;A moments Other melting offer traced 
+;;A pond to lover clean design charade 
+;;Because egress conspicuous depraved 
+;;A kneading basic knee-deep based constraint 
 ;; @@
